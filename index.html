@@ -1,0 +1,141 @@
+html_code = """<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0284c7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="माही वॉटर">
+    <title>माही वॉटर फिल्टर — जार डिलीवरी & खाता बुक</title>
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { margin: 0; background: #f0f4f8; color: #1e293b; padding-bottom: 40px; }
+        .header { background: linear-gradient(135deg, #0284c7, #0369a1); color: white; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); gap: 8px; flex-wrap: wrap; }
+        .brand-wrap { display: flex; align-items: center; gap: 10px; }
+        .profile-avatar { width: 46px; height: 46px; border-radius: 50%; border: 2px solid white; object-fit: cover; background: #e0f2fe; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; overflow: hidden; }
+        .header h1 { margin: 0; font-size: 18px; line-height: 1.2; }
+        .header small { font-size: 11px; opacity: 0.92; display: block; margin-top: 2px; }
+        .header-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+        .lang-select { background: rgba(255,255,255,0.18); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 6px 8px; border-radius: 8px; font-weight: bold; font-size: 12px; width: auto; margin: 0; cursor: pointer; }
+        .lang-select option { color: #0f172a; background: white; }
+        .btn-install { background: #facc15; color: #0f172a; border: none; padding: 7px 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; white-space: nowrap; }
+        .btn-top { background: white; color: #0369a1; border: none; padding: 7px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; white-space: nowrap; }
+        .container { max-width: 720px; margin: 14px auto; padding: 0 12px; }
+        .banner-card { background: linear-gradient(135deg, #0369a1, #0ea5e9); color: white; border-radius: 12px; padding: 16px; margin-bottom: 14px; text-align: center; box-shadow: 0 3px 10px rgba(2,132,199,0.2); }
+        .banner-card h2 { margin: 0 0 6px 0; font-size: 20px; color: white; border: none; padding: 0; }
+        .banner-card p { margin: 4px 0; font-size: 13px; opacity: 0.95; }
+        .card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+        .card h2, .card h3 { margin-top: 0; color: #0f172a; font-size: 17px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
+        label { display: block; margin-top: 10px; font-size: 13px; font-weight: 600; color: #475569; }
+        input, select, textarea { width: 100%; padding: 11px; margin-top: 5px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; background: #f8fafc; }
+        input:focus, select:focus { outline: none; border-color: #0284c7; background: white; }
+        .btn { width: 100%; padding: 12px; margin-top: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; color: white; background: #0284c7; transition: 0.2s; display: inline-block; text-align: center; text-decoration: none; }
+        .btn:hover { background: #0369a1; }
+        .btn-green { background: #16a34a; }
+        .btn-green:hover { background: #15803d; }
+        .btn-orange { background: #ea580c; }
+        .btn-orange:hover { background: #c2410c; }
+        .btn-gray { background: #64748b; }
+        .btn-sm { width: auto; padding: 6px 12px; font-size: 12px; margin-top: 4px; }
+        .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; }
+        .tab-btn { background: #e2e8f0; color: #334155; border: none; padding: 10px 13px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; font-size: 13px; }
+        .tab-btn.active { background: #0284c7; color: white; }
+        .hidden { display: none !important; }
+        .list-item { border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 10px; background: #f8fafc; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        .badge-pending { background: #fef08a; color: #854d0e; }
+        .badge-done { background: #bbf7d0; color: #166534; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+        th, td { border: 1px solid #cbd5e1; padding: 8px 6px; text-align: center; }
+        th { background: #0284c7; color: white; }
+        tr:nth-child(even) { background: #f8fafc; }
+        .summary-box { background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px; border-radius: 8px; margin-top: 12px; }
+        .summary-row { display: flex; justify-content: space-between; margin: 6px 0; font-size: 14px; }
+        .summary-sub { font-weight: 600; color: #0f172a; border-top: 1px solid #cbd5e1; padding-top: 6px; }
+        .summary-total { font-weight: bold; font-size: 16px; color: #1e3a8a; border-top: 2px dashed #60a5fa; padding-top: 8px; margin-top: 6px; }
+        .receipt-card { background: #f0fdf4; border: 2px solid #16a34a; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+        .receipt-preview { background: white; border: 1px dashed #86efac; padding: 12px; border-radius: 8px; font-size: 13px; white-space: pre-line; margin: 10px 0; color: #1e293b; line-height: 1.5; }
+        .msg-btn-row { display: flex; gap: 10px; }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; }
+            .card { box-shadow: none; border: 1px solid #000; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header no-print">
+    <div class="brand-wrap">
+        <div id="headerAvatarBox" class="profile-avatar">💧</div>
+        <div>
+            <h1 id="appTitle">माही वॉटर फिल्टर</h1>
+            <small id="portalSubtitle">शुद्ध पेयजल जार बुकिंग एवं खाता बुक</small>
+        </div>
+    </div>
+    <div class="header-actions">
+        <select id="langSelector" class="lang-select" onchange="changeLanguage(this.value)">
+            <option value="hi">हिंदी</option>
+            <option value="mr">मराठी</option>
+            <option value="en">English</option>
+        </select>
+        <button class="btn-install" id="installAppBtn" onclick="installPWA()">📲 App</button>
+        <button class="btn-top" id="authToggleBtn" onclick="toggleLoginBox()">Staff / Admin</button>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- PIN LOGIN SECTION -->
+    <div id="loginSection" class="card hidden no-print">
+        <h3 id="t_loginTitle">🔐 Admin / Staff लॉग-इन</h3>
+        <label id="t_selectRole">आपकी भूमिका चुनें</label>
+        <select id="loginRole">
+            <option value="admin" id="t_roleAdmin">Admin (मालिक - Full Access)</option>
+            <option value="employee" id="t_roleEmp">Employee (डिलीवरी स्टाफ)</option>
+        </select>
+        <label id="t_enterPin">4-अंकों का PIN डालें</label>
+        <input type="password" id="loginPin" maxlength="6" placeholder="Admin: 1234 | Staff: 1111" inputmode="numeric">
+        <div style="display:flex; gap:10px;">
+            <button class="btn" id="t_btnLogin" onclick="doPinLogin()">लॉग-इन करें</button>
+            <button class="btn btn-gray" style="width:35%;" id="t_btnCancel" onclick="toggleLoginBox()">रद्द करें</button>
+        </div>
+    </div>
+
+    <!-- PUBLIC CUSTOMER BOOKING SECTION -->
+    <div id="publicSection">
+        <div class="banner-card">
+            <h2 id="t_bannerTitle">💧 माही वॉटर फिल्टर — गंगापूर</h2>
+            <p id="t_bannerSub">ताज़ा, ठंडा और 100% शुद्ध RO पेयजल जार आपके घर एवं ऑफिस तक</p>
+            <p style="font-size:12px; opacity:0.9;">📍 जुना मांजरी रस्ता, समतानगर, गंगापूर, छ. संभाजीनगर (औरंगाबाद) - 431109</p>
+        </div>
+
+        <div class="card">
+            <h2 id="t_bookHeading">🚚 ऑनलाइन वॉटर जार बुक करें</h2>
+            <label id="t_lblBookName">आपका नाम *</label>
+            <input type="text" id="bookName" placeholder="उदा. सुनील खाजेकर">
+            <label id="t_lblBookPhone">मोबाइल नंबर *</label>
+            <input type="tel" id="bookPhone" placeholder="10 अंकों का मोबाइल नंबर">
+            <label id="t_lblBookAddr">पूरा पता (Address) *</label>
+            <input type="text" id="bookAddress" placeholder="घर नंबर, गली / एरिया">
+            <label id="t_lblBookJars">कितने जार चाहिए?</label>
+            <input type="number" id="bookJars" value="1" min="1">
+            <button class="btn btn-green" id="t_btnBookOrder" onclick="submitBooking()">ऑर्डर बुक करें</button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboardSection" class="hidden">
+        <div class="tabs no-print">
+            <button class="tab-btn active" id="tabBtnDaily" onclick="showTab('tabDaily', this)">📦 डिलीवरी & पेमेंट</button>
+            <button class="tab-btn" id="tabBtnMonthly" onclick="showTab('tabMonthly', this)">📅 मासिक कार्ड (Bill)</button>
+            <button class="tab-btn" id="tabBtnCust" onclick="showTab('tabCustomers', this)">👥 ग्राहक & बकाया</button>
+            <button class="tab-btn admin-only" id="tabBtnBook" onclick="showTab('tabBookings', this)">🔔 बुकिंग्स</button>
+            <button class="tab-btn admin-only" id="tabBtnSet" onclick="showTab('tabSettings', this)">⚙️ सेटिंग्स</button>
+        </div>
+
+        <!-- TAB 1: DAILY DELIVERY & PAYMENT -->
+        <div id="tabDaily" class="tab-content">
+            <div class="card">
+                <h3 id="t_delHeading">1. जार डिलीवरी एंट्री</h3>
